@@ -14,7 +14,7 @@ module "app" {
   az_count = "${var.az_count}"
 }
 
-module "nat" {
+module "default" {
   source = "../module-aws-service"
 
   provider_region = "${var.provider_region}"
