@@ -1,1 +1,1 @@
-../module-aws-service/service.tf
+../app-xxx/service.tf
