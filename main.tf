@@ -1,4 +1,11 @@
-provider "aws" {
+provider "aws" { }
+
+data "terraform_remote_state" "global" {
+  backend = "s3"
+  config {
+    bucket = "${var.bucket_remote_state}"
+    key = "${var.bucket_remote_state}/env-${var.context_org}-global.tfstate"
+  }
 }
 
 module "app" {
@@ -7,8 +14,6 @@ module "app" {
   bucket_remote_state = "${var.bucket_remote_state}"
   context_org = "${var.context_org}"
   context_env = "${var.context_env}"
-
-  az_count = "${var.az_count}"
 }
 
 module "default" {
@@ -18,15 +23,15 @@ module "default" {
   context_org = "${var.context_org}"
   context_env = "${var.context_env}"
 
-  az_count = "${var.az_count}"
-
   cidr_blocks = "${var.cidr_blocks}"
+
+  az_count = "${var.az_count}"
 }
 
 resource "aws_eip" "nat" {
-  vpc = true
-
   count = "${var.az_count}"
+
+  vpc = true
 }
 
 resource "aws_nat_gateway" "nat" {
